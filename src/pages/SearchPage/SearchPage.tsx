@@ -258,7 +258,7 @@ export const SearchPage = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to generate match",
+        description: `Failed to generate match: ${error}`,
         status: "error",
         duration: 3000,
         isClosable: true,

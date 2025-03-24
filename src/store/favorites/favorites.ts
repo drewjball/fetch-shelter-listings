@@ -24,7 +24,8 @@ const getOldFavorites = (): Dog[] => {
       return parsed.map((p) => p[1])
     }
     return []
-  } catch (e) {
+  } catch (error) {
+    console.error("Error getting old favorites", error)
     return []
   }
 }
