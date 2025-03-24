@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom"
 
+import { Analytics } from "@vercel/analytics/react"
 import { ChakraProvider } from "@chakra-ui/react"
 import { LoginPage } from "./pages/LoginPage/LoginPage"
 import { SearchPage } from "./pages/SearchPage/SearchPage"
@@ -69,6 +70,7 @@ export const App = () => {
             }
           />
         </Routes>
+        <Analytics />
       </Router>
     </ChakraProvider>
   )
