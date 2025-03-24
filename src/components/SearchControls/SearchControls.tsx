@@ -76,7 +76,7 @@ export const SearchControls = ({
   const [zipInput, setZipInput] = useState(zipCode || "")
 
   useEffect(() => {
-    if (sortField === "breed" && selectedBreeds.length < 2) {
+    if (sortField === "breed" && selectedBreeds.length === 1) {
       onSortFieldChange("name")
     }
   }, [selectedBreeds.length, sortField, onSortFieldChange])
@@ -183,7 +183,7 @@ export const SearchControls = ({
               Sort: {sortFieldLabels[sortField] || "Name"}
             </MenuButton>
             <MenuList>
-              {selectedBreeds.length > 1 && (
+              {selectedBreeds.length !== 1 && (
                 <MenuItem onClick={() => onSortFieldChange("breed")}>
                   Breed
                 </MenuItem>
