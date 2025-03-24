@@ -9,6 +9,7 @@ import {
 import { Analytics } from "@vercel/analytics/react"
 import { ChakraProvider } from "@chakra-ui/react"
 import { LoginPage } from "./pages/LoginPage/LoginPage"
+import { NotFound } from "./components"
 import { SearchPage } from "./pages/SearchPage/SearchPage"
 import { SessionTimeoutWarning } from "./components/SessionTimeoutWarning/SessionTimeoutWarning"
 import { theme } from "./theme"
@@ -69,6 +70,7 @@ export const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Analytics />
       </Router>

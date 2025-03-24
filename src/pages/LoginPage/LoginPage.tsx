@@ -24,8 +24,17 @@ export const LoginPage: React.FC = () => {
     }
     try {
       await login({ name, email })
-    } catch (err) {
-      console.error("Login submission error:", err)
+    } catch (e) {
+      console.error("Login submission error:", e)
+      toast({
+        title: "Authentication Failed",
+        description:
+          error ||
+          "Could not log in. Please check your credentials and try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
 

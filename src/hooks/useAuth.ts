@@ -78,10 +78,10 @@ export const useAuth = () => {
         setTimeout(() => {
           navigate("/search")
         }, 100)
-      } catch (err: any) {
-        console.error("Login error:", err)
+      } catch (error: any) {
+        console.error("Login error:", error)
         setError(
-          err.response?.data?.message ||
+          error.response?.data?.message ||
             "Failed to login. Please check your credentials and try again."
         )
         setIsAuthenticated(false)
@@ -107,10 +107,10 @@ export const useAuth = () => {
       sessionStorage.removeItem("userName")
       sessionStorage.removeItem("userEmail")
       navigate("/")
-    } catch (err: any) {
-      console.error("Logout error:", err)
+    } catch (error: any) {
+      console.error("Logout error:", error)
       setError(
-        err.response?.data?.message || "Failed to logout. Please try again."
+        error.response?.data?.message || "Failed to logout. Please try again."
       )
     } finally {
       setIsLoading(false)
@@ -142,8 +142,8 @@ export const useAuth = () => {
         setTimeout(() => {
           checkSessionRef.current?.()
         }, 100)
-      } catch (err) {
-        console.error("Failed to extend session:", err)
+      } catch (error) {
+        console.error("Failed to extend session:", error)
         setSessionExpiring(true)
       } finally {
         setIsLoading(false)
