@@ -1,7 +1,7 @@
-import { AuthLayout, LoginForm } from "../components"
+import { AuthLayout, LoginForm } from "../../components"
 import React, { FormEvent, useState } from "react"
 
-import { useAuth } from "../hooks/useAuth"
+import { useAuth } from "../../hooks/useAuth"
 import { useToast } from "@chakra-ui/react"
 
 export const LoginPage: React.FC = () => {

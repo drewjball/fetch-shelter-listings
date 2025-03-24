@@ -1,48 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { useFavoritesStore } from "../favorites"
+
 import { act } from "@testing-library/react"
-
-// Mock sessionStorage
-const mockSessionStorage = (() => {
-  let store: Record<string, string> = {}
-  return {
-    getItem: vi.fn((key) => store[key] || null),
-    setItem: vi.fn((key, value) => {
-      store[key] = value.toString()
-    }),
-    clear: vi.fn(() => {
-      store = {}
-    }),
-  }
-})()
-
-// Mock localStorage for getOldFavorites
-const mockLocalStorage = (() => {
-  let store: Record<string, string> = {}
-  return {
-    getItem: vi.fn((key) => store[key] || null),
-    setItem: vi.fn((key, value) => {
-      store[key] = value.toString()
-    }),
-    clear: vi.fn(() => {
-      store = {}
-    }),
-  }
-})()
+import { useFavoritesStore } from "./favorites"
 
 describe("useFavoritesStore", () => {
-  beforeEach(() => {
-    vi.stubGlobal("sessionStorage", mockSessionStorage)
-    vi.stubGlobal("localStorage", mockLocalStorage)
-    mockSessionStorage.clear()
-    mockLocalStorage.clear()
-
-    // Reset the store state
-    act(() => {
-      useFavoritesStore.setState({ favorites: [] })
-    })
-  })
-
   const mockDog1 = {
     id: "123",
     name: "Buddy",
@@ -60,6 +21,23 @@ describe("useFavoritesStore", () => {
     zip_code: "67890",
     img: "https://example.com/dog2.jpg",
   }
+
+  beforeEach(() => {
+    vi.stubGlobal("sessionStorage", {
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      clear: vi.fn(),
+    })
+    vi.stubGlobal("localStorage", {
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      clear: vi.fn(),
+    })
+
+    act(() => {
+      useFavoritesStore.setState({ favorites: [] })
+    })
+  })
 
   it("should initially have empty favorites", () => {
     const state = useFavoritesStore.getState()

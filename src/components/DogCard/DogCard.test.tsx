@@ -3,7 +3,6 @@ import * as originalModule from "./DogCard"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { fireEvent, render, screen } from "../../test/test-utils"
 
-// Mock the DogCard component to remove motion dependency
 const MockDogCard = ({ dog, isFavorite, onToggleFavorite }: any) => {
   return (
     <div data-testid="dog-card" data-favorite={isFavorite}>
@@ -22,7 +21,6 @@ const MockDogCard = ({ dog, isFavorite, onToggleFavorite }: any) => {
   )
 }
 
-// Mock the DogCard module
 vi.mock("./DogCard", async () => {
   const actual = await vi.importActual<typeof originalModule>("./DogCard")
   return {
@@ -73,7 +71,6 @@ describe("DogCard", () => {
       />
     )
 
-    // Check for favorited styles or classes
     const heartButton = screen.getByLabelText("Favorite")
     expect(heartButton).toHaveAttribute("data-colorscheme", "brand")
   })

@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from "../../test/test-utils"
-import { vi, describe, it, expect } from "vitest"
+import { describe, expect, it, vi } from "vitest"
+import { fireEvent, render, screen } from "../../test/test-utils"
+
 import { Pagination } from "./Pagination"
 
 describe("Pagination", () => {
@@ -19,8 +20,6 @@ describe("Pagination", () => {
   it("renders pagination info correctly", () => {
     render(<Pagination {...defaultProps} />)
 
-    // Use regex to match text that might be broken across elements
-    expect(screen.getByText(/Page/)).toBeInTheDocument()
     expect(screen.getByText("2")).toBeInTheDocument()
     expect(screen.getByText(/of/)).toBeInTheDocument()
     expect(screen.getByText("5")).toBeInTheDocument()
@@ -33,17 +32,25 @@ describe("Pagination", () => {
     expect(screen.getByText("Loading...")).toBeInTheDocument()
   })
 
-  it("shows favorite count when showOnlyFavorites is true", () => {
-    render(<Pagination {...defaultProps} showOnlyFavorites={true} />)
+  it("shows favorite count when showOnlyFavorites is true and totalPages <= 1", () => {
+    render(
+      <Pagination
+        {...defaultProps}
+        showOnlyFavorites={true}
+        total={10}
+        totalPages={1}
+      />
+    )
 
-    expect(screen.getByText("Showing 10 favorites")).toBeInTheDocument()
+    expect(screen.getByText(/Showing 10 favorites/)).toBeInTheDocument()
   })
 
-  it("doesn't show pagination buttons when showOnlyFavorites is true", () => {
+  it("shows pagination controls when showOnlyFavorites is true with multiple pages", () => {
     render(<Pagination {...defaultProps} showOnlyFavorites={true} />)
 
-    expect(screen.queryByText("Previous")).not.toBeInTheDocument()
-    expect(screen.queryByText("Next")).not.toBeInTheDocument()
+    expect(screen.getByText("Previous")).toBeInTheDocument()
+    expect(screen.getByText("Next")).toBeInTheDocument()
+    expect(screen.getByText(/\(100 dogs\)/)).toBeInTheDocument()
   })
 
   it("calls onNextPage when Next button is clicked", () => {

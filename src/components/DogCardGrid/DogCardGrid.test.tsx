@@ -3,7 +3,6 @@ import { render, screen } from "../../test/test-utils"
 
 import { DogCardGrid } from "./DogCardGrid"
 
-// Mock the DogCard component
 vi.mock("../DogCard/DogCard", () => ({
   DogCard: ({ dog, isFavorite, onToggleFavorite }: any) => (
     <div data-testid={`dog-card-${dog.id}`} data-favorite={isFavorite}>
@@ -13,12 +12,10 @@ vi.mock("../DogCard/DogCard", () => ({
   ),
 }))
 
-// Mock the DogCardSkeleton
 vi.mock("../DogCardSkeleton/DogCardSkeleton", () => ({
   DogCardSkeleton: () => <div data-testid="dog-card-skeleton" />,
 }))
 
-// Mock framer-motion
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }))

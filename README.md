@@ -17,6 +17,7 @@ A friendly way to browse adoptable shelter dogs:
 - **Chakra UI** for components
 - **Zustand** for simple state management
 - **Vite** for lightning-fast development
+- **Vitest** for unit testing
 
 ## 🚀 Quick Start
 

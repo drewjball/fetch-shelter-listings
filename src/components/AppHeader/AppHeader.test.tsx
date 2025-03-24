@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from "../../test/test-utils"
-import { vi, describe, it, expect } from "vitest"
+import { describe, expect, it, vi } from "vitest"
+import { fireEvent, render, screen } from "../../test/test-utils"
+
 import { AppHeader } from "./AppHeader"
 
 describe("AppHeader", () => {

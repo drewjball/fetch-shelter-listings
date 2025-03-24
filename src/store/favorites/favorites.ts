@@ -1,6 +1,6 @@
 import { createJSONStorage, persist } from "zustand/middleware"
 
-import { Dog } from "../types"
+import { Dog } from "../../types"
 import { create } from "zustand"
 
 interface FavoritesState {

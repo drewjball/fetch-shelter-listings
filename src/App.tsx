@@ -7,22 +7,30 @@ import {
 } from "react-router-dom"
 
 import { ChakraProvider } from "@chakra-ui/react"
-import { LoginPage } from "./pages/LoginPage"
-import { SearchPage } from "./pages/SearchPage"
+import { LoginPage } from "./pages/LoginPage/LoginPage"
+import { SearchPage } from "./pages/SearchPage/SearchPage"
+import { SessionTimeoutWarning } from "./components/SessionTimeoutWarning/SessionTimeoutWarning"
 import { theme } from "./theme"
 import { useAuth } from "./hooks/useAuth"
+import { useSessionActivity } from "./hooks/useSessionActivity"
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { isAuthenticated } = useAuth()
   const location = useLocation()
+  useSessionActivity()
 
   if (!isAuthenticated) {
     return <Navigate to="/" state={{ from: location }} replace />
   }
 
-  return <>{children}</>
+  return (
+    <>
+      {children}
+      <SessionTimeoutWarning />
+    </>
+  )
 }
 
 const AuthenticatedRoute: React.FC<{ children: React.ReactNode }> = ({

@@ -8,6 +8,8 @@ import {
   Image,
   Text,
   VStack,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react"
 
 import { Dog } from "../../types"
@@ -28,7 +30,7 @@ export const MatchBanner = ({ dog, onClose }: MatchBannerProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      p={6}
+      p={{ base: 4, md: 6 }}
       w="full"
       borderWidth={2}
       borderColor="brand.500"
@@ -36,36 +38,75 @@ export const MatchBanner = ({ dog, onClose }: MatchBannerProps) => {
       bg="background.tertiary"
       boxShadow="lg"
     >
-      <Flex direction={{ base: "column", md: "row" }} align="center" gap={6}>
-        <Image
-          src={dog.img}
-          alt={dog.name}
-          borderRadius="lg"
-          maxH="300px"
-          objectFit="cover"
-          boxShadow="md"
-          flex="1"
-        />
-        <VStack align="flex-start" spacing={4} flex="2">
-          <Heading size="xl" color="brand.700" fontWeight="extrabold">
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        align={{ base: "center", md: "flex-start" }}
+        gap={{ base: 4, md: 6 }}
+      >
+        <Box
+          width={{ base: "full", md: "auto" }}
+          maxW={{ base: "280px", md: "320px" }}
+          textAlign="center"
+        >
+          <Image
+            src={dog.img}
+            alt={dog.name}
+            borderRadius="lg"
+            maxH={{ base: "200px", md: "300px" }}
+            objectFit="cover"
+            objectPosition="center 30%"
+            boxShadow="md"
+            mx="auto"
+          />
+        </Box>
+        <VStack
+          align={{ base: "center", md: "flex-start" }}
+          spacing={{ base: 3, md: 4 }}
+          flex="2"
+          width="full"
+        >
+          <Heading
+            size={{ base: "lg", md: "xl" }}
+            color="brand.700"
+            fontWeight="extrabold"
+            textAlign={{ base: "center", md: "left" }}
+          >
             You've been matched with {dog.name}!
           </Heading>
-          <Text fontSize="lg">
+          <Text
+            fontSize={{ base: "md", md: "lg" }}
+            textAlign={{ base: "center", md: "left" }}
+          >
             {dog.name} is a {dog.age === 0 ? "< 1" : dog.age} year old{" "}
             {dog.breed} who can't wait to meet you!
           </Text>
-          <HStack>
-            <Badge colorScheme="brand" fontSize="md" px={3} py={1}>
-              {dog.breed}
-            </Badge>
-            <Badge colorScheme="accent" fontSize="md" px={3} py={1}>
-              {dog.age === 0 ? "< 1" : dog.age} years old
-            </Badge>
-            <Badge colorScheme="gray" fontSize="md" px={3} py={1}>
-              ZIP: {dog.zip_code}
-            </Badge>
-          </HStack>
-          <Text fontSize="md" color="gray.600">
+          <Wrap
+            spacing={2}
+            justify={{ base: "center", md: "flex-start" }}
+            width="full"
+          >
+            <WrapItem>
+              <Badge colorScheme="brand" fontSize="md" px={3} py={1}>
+                {dog.breed}
+              </Badge>
+            </WrapItem>
+            <WrapItem>
+              <Badge colorScheme="accent" fontSize="md" px={3} py={1}>
+                {dog.age === 0 ? "< 1" : dog.age} years old
+              </Badge>
+            </WrapItem>
+            <WrapItem>
+              <Badge colorScheme="gray" fontSize="md" px={3} py={1}>
+                ZIP: {dog.zip_code}
+              </Badge>
+            </WrapItem>
+          </Wrap>
+          <Text
+            fontSize="md"
+            color="gray.600"
+            textAlign={{ base: "center", md: "left" }}
+            px={{ base: 2, md: 0 }}
+          >
             This match was made based on your favorites. We think you and{" "}
             {dog.name} will be perfect together!
           </Text>
@@ -74,6 +115,8 @@ export const MatchBanner = ({ dog, onClose }: MatchBannerProps) => {
             colorScheme="brand"
             size="lg"
             onClick={onClose}
+            width={{ base: "full", md: "auto" }}
+            mt={{ base: 2, md: 0 }}
           >
             Continue Searching
           </Button>

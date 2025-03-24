@@ -7,7 +7,7 @@ import {
   Match,
   SearchFilters,
   SearchResponse,
-} from "../../types"
+} from "../types"
 
 import axios from "axios"
 
@@ -21,12 +21,40 @@ const api = axios.create({
   },
 })
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      sessionStorage.removeItem("isAuthenticated")
+      window.location.href = "/"
+    }
+    return Promise.reject(error)
+  }
+)
+
 export const login = async (credentials: LoginCredentials): Promise<void> => {
   await api.post("/auth/login", credentials)
 }
 
 export const logout = async (): Promise<void> => {
   await api.post("/auth/logout")
+}
+
+export const refreshToken = async (): Promise<void> => {
+  try {
+    const name = sessionStorage.getItem("userName")
+    const email = sessionStorage.getItem("userEmail")
+
+    if (!name || !email) {
+      console.error("Cannot refresh token: missing credentials")
+      return Promise.reject(new Error("Missing credentials for token refresh"))
+    }
+    await login({ name, email })
+    return Promise.resolve()
+  } catch (error) {
+    console.error("Failed to refresh token:", error)
+    return Promise.reject(error)
+  }
 }
 
 export const getBreeds = async (): Promise<string[]> => {

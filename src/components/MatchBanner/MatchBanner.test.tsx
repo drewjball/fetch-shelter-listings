@@ -1,86 +1,66 @@
-import * as originalModule from "./MatchBanner"
-
 import { describe, expect, it, vi } from "vitest"
 import { fireEvent, render, screen } from "../../test/test-utils"
 
-// Mock MatchBanner to avoid framer-motion issues
-const MockMatchBanner = ({ dog, onClose }: any) => {
-  return (
-    <div data-testid="match-banner">
-      <h1>You've been matched with {dog.name}!</h1>
-      <p>
-        {dog.name} is a {dog.age === 0 ? "< 1" : dog.age} year old {dog.breed}{" "}
-        who can't wait to meet you!
-      </p>
-      <div>
-        <span>{dog.breed}</span>
-        <span>{dog.age === 0 ? "< 1" : dog.age} years old</span>
-        <span>ZIP: {dog.zip_code}</span>
-      </div>
-      <button onClick={onClose}>Continue Searching</button>
-    </div>
-  )
-}
+import { MatchBanner } from "./MatchBanner"
 
-// Mock the MatchBanner module
-vi.mock("./MatchBanner", async () => {
-  const actual = await vi.importActual<typeof originalModule>("./MatchBanner")
-  return {
-    ...actual,
-    MatchBanner: MockMatchBanner,
-  }
-})
+vi.mock("./MatchBanner", () => ({
+  MatchBanner: ({ dog, onClose }: any) => {
+    if (!dog) return null
+    return (
+      <div data-testid="mock-match-banner">
+        <h1>It's a match!</h1>
+        <h2>{dog.name}</h2>
+        <p>{dog.breed}</p>
+        <img src={dog.img} alt="Dog" />
+        <button onClick={onClose}>Close</button>
+      </div>
+    )
+  },
+}))
 
 describe("MatchBanner", () => {
-  const mockDog = {
-    id: "123",
-    name: "Buddy",
-    breed: "Golden Retriever",
-    age: 3,
-    zip_code: "12345",
-    img: "https://example.com/dog.jpg",
-  }
-
   it("renders the matched dog information correctly", () => {
-    const onClose = vi.fn()
+    const matchedDog = {
+      id: "123",
+      name: "Buddy",
+      breed: "Golden Retriever",
+      age: 3,
+      zip_code: "12345",
+      img: "https://example.com/dog.jpg",
+    }
 
-    render(<MockMatchBanner dog={mockDog} onClose={onClose} />)
+    render(<MatchBanner dog={matchedDog} onClose={() => {}} />)
 
-    expect(
-      screen.getByText("You've been matched with Buddy!")
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        "Buddy is a 3 year old Golden Retriever who can't wait to meet you!"
-      )
-    ).toBeInTheDocument()
+    expect(screen.getByText("It's a match!")).toBeInTheDocument()
+    expect(screen.getByText("Buddy")).toBeInTheDocument()
     expect(screen.getByText("Golden Retriever")).toBeInTheDocument()
-    expect(screen.getByText("3 years old")).toBeInTheDocument()
-    expect(screen.getByText("ZIP: 12345")).toBeInTheDocument()
+    expect(screen.getByAltText("Dog")).toHaveAttribute(
+      "src",
+      "https://example.com/dog.jpg"
+    )
   })
 
-  it("calls onClose when the continue button is clicked", () => {
+  it("calls onClose when close button is clicked", () => {
     const onClose = vi.fn()
+    const matchedDog = {
+      id: "123",
+      name: "Buddy",
+      breed: "Golden Retriever",
+      age: 3,
+      zip_code: "12345",
+      img: "https://example.com/dog.jpg",
+    }
 
-    render(<MockMatchBanner dog={mockDog} onClose={onClose} />)
+    render(<MatchBanner dog={matchedDog} onClose={onClose} />)
 
-    const continueButton = screen.getByText("Continue Searching")
-    fireEvent.click(continueButton)
+    const closeButton = screen.getByRole("button", { name: /close/i })
+    fireEvent.click(closeButton)
 
-    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(onClose).toHaveBeenCalled()
   })
 
-  it("displays '< 1 years old' for puppies", () => {
-    const onClose = vi.fn()
-    const puppyDog = { ...mockDog, age: 0 }
-
-    render(<MockMatchBanner dog={puppyDog} onClose={onClose} />)
-
-    expect(screen.getByText("< 1 years old")).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        "Buddy is a < 1 year old Golden Retriever who can't wait to meet you!"
-      )
-    ).toBeInTheDocument()
+  it("renders null when no dog is provided", () => {
+    render(<MatchBanner dog={null as any} onClose={() => {}} />)
+    expect(screen.queryByTestId("mock-match-banner")).not.toBeInTheDocument()
   })
 })

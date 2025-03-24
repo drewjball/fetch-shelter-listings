@@ -1,18 +1,30 @@
-import { render, screen, fireEvent } from "../../test/test-utils"
-import { vi, describe, it, expect } from "vitest"
+import { describe, expect, it, vi } from "vitest"
+import { fireEvent, render, screen } from "../../test/test-utils"
+
 import { SearchControls } from "./SearchControls"
 
-// Mock chakra-react-select
 vi.mock("chakra-react-select", () => ({
-  Select: ({ onChange, value, options, placeholder }: any) => (
+  Select: ({ onChange, value, options, placeholder, isMulti }: any) => (
     <div data-testid="select-mock">
       <input
         data-testid="select-input"
-        onChange={(e) =>
-          onChange(options.find((o: any) => o.value === e.target.value) || null)
-        }
+        onChange={(e) => {
+          if (isMulti) {
+            const option = options.find((o: any) => o.value === e.target.value)
+            const newSelection = option ? [...(value || []), option] : []
+            onChange(newSelection.length ? newSelection : null)
+          } else {
+            onChange(
+              options.find((o: any) => o.value === e.target.value) || null
+            )
+          }
+        }}
         placeholder={placeholder}
-        value={value?.value || ""}
+        value={
+          isMulti
+            ? value?.map((v: any) => v.value).join(", ") || ""
+            : value?.value || ""
+        }
       />
       <select data-testid="select-options">
         {options.map((option: any) => (
@@ -33,31 +45,35 @@ describe("SearchControls", () => {
 
   const defaultProps = {
     breedOptions: mockBreedOptions,
-    selectedBreed: null,
-    onBreedChange: vi.fn(),
+    selectedBreeds: [],
+    onBreedsChange: vi.fn(),
+    sortField: "breed",
     sortDirection: "asc" as const,
+    onSortFieldChange: vi.fn(),
     onSortToggle: vi.fn(),
     onMatchClick: vi.fn(),
     matchCount: 2,
     disableMatch: false,
     showingFavorites: false,
+    ageMin: undefined,
+    ageMax: undefined,
+    zipCode: undefined,
+    onAgeFilterChange: vi.fn(),
+    onZipCodeChange: vi.fn(),
   }
 
   it("renders select with the correct placeholder when not showing favorites", () => {
     render(<SearchControls {...defaultProps} />)
 
     const select = screen.getByTestId("select-input")
-    expect(select).toHaveAttribute("placeholder", "Find a breed...")
+    expect(select).toHaveAttribute("placeholder", "Select breeds...")
   })
 
   it("renders select with different placeholder when showing favorites", () => {
     render(<SearchControls {...defaultProps} showingFavorites={true} />)
 
     const select = screen.getByTestId("select-input")
-    expect(select).toHaveAttribute(
-      "placeholder",
-      "Filter your favorites by breed"
-    )
+    expect(select).toHaveAttribute("placeholder", "Filter your favorites...")
   })
 
   it("displays sort button when not showing favorites", () => {
@@ -67,11 +83,10 @@ describe("SearchControls", () => {
     expect(sortButton).toBeInTheDocument()
   })
 
-  it("hides sort button when showing favorites", () => {
+  it("shows sort buttons in favorites mode", () => {
     render(<SearchControls {...defaultProps} showingFavorites={true} />)
 
-    expect(screen.queryByLabelText("Sort descending")).not.toBeInTheDocument()
-    expect(screen.queryByLabelText("Sort ascending")).not.toBeInTheDocument()
+    expect(screen.getByLabelText("Sort descending")).toBeInTheDocument()
   })
 
   it("displays correct sort button based on sort direction", () => {

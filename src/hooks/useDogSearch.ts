@@ -1,5 +1,5 @@
 import { Dog, SearchFilters } from "../types"
-import { getBreeds, getDogs, searchDogs } from "../services/api/api"
+import { getBreeds, getDogs, searchDogs } from "../services/api"
 import { useCallback, useEffect, useState } from "react"
 
 const STORAGE_KEY_FILTERS = "search_filters"
@@ -22,6 +22,10 @@ export const useDogSearch = () => {
   const [total, setTotal] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+
+  const [field, order] = (filters.sort || "breed:asc").split(":")
+  const sortField = field
+  const sortDirection = order as "asc" | "desc"
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_FILTERS, JSON.stringify(filters))
@@ -86,11 +90,19 @@ export const useDogSearch = () => {
   }, [filters.from, filters.size, updateFilters])
 
   const toggleSort = useCallback(() => {
-    const currentSort = filters.sort || "breed:asc"
-    const [field, order] = currentSort.split(":")
-    const newOrder = order === "asc" ? "desc" : "asc"
-    updateFilters({ sort: `${field}:${newOrder}` })
+    const [currentField, currentOrder] = (filters.sort || "breed:asc").split(
+      ":"
+    )
+    const newOrder = currentOrder === "asc" ? "desc" : "asc"
+    updateFilters({ sort: `${currentField}:${newOrder}` })
   }, [filters.sort, updateFilters])
+
+  const setSortField = useCallback(
+    (field: string) => {
+      updateFilters({ sort: `${field}:${sortDirection}` })
+    },
+    [sortDirection, updateFilters]
+  )
 
   return {
     dogs,
@@ -102,9 +114,12 @@ export const useDogSearch = () => {
     totalPages,
     hasNext: currentPage < totalPages,
     hasPrev: currentPage > 1,
+    sortField,
+    sortDirection,
     updateFilters,
     nextPage,
     prevPage,
     toggleSort,
+    setSortField,
   }
 }

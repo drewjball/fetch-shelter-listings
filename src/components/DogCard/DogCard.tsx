@@ -43,6 +43,7 @@ export const DogCard = ({
           src={dog.img}
           alt={dog.name}
           objectFit="cover"
+          objectPosition="center 30%"
           w="full"
           h="full"
           transition="transform 0.3s ease"
@@ -76,7 +77,6 @@ export const DogCard = ({
         <Heading size="md" color="gray.800">
           {dog.name}
         </Heading>
-
         <HStack spacing={2} flexWrap="wrap">
           <Badge colorScheme="brand" fontSize="0.8rem" py={1} px={2}>
             {dog.breed}

@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from "../../test/test-utils"
-import { vi, describe, it, expect } from "vitest"
+import { describe, expect, it, vi } from "vitest"
+import { fireEvent, render, screen } from "../../test/test-utils"
+
 import { LoginForm } from "./LoginForm"
 
 describe("LoginForm", () => {
@@ -55,7 +56,6 @@ describe("LoginForm", () => {
   it("calls onSubmit when form is submitted", () => {
     render(<LoginForm {...defaultProps} />)
 
-    // Get the form element using querySelector since it doesn't have a role
     const form = document.querySelector("form")
     expect(form).not.toBeNull()
     if (form) {
@@ -75,7 +75,6 @@ describe("LoginForm", () => {
   it("disables button and shows loading state when isLoading is true", () => {
     render(<LoginForm {...defaultProps} isLoading={true} />)
 
-    // Look for the button with type="submit" and check if it's disabled
     const button = screen.getByRole("button", { name: /Signing in/i })
     expect(button).toBeDisabled()
   })
