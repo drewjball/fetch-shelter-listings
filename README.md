@@ -50,6 +50,11 @@ src/
 - User favorites persist between sessions using local storage
 - No env variables needed - API connections are pre-configured
 - Components are designed to be reusable with clear prop interfaces
+- Authentication Issues with Cookies in Safari and Other Browsers:
+
+Some modern browsers, like Safari, block third-party cookies by default as part of their privacy features (cross-site tracking prevention). This can prevent the app from maintaining the logged-in state properly.
+
+Recommendation: For the best experience, use Chrome on desktop, as it does not block these cookies in the same way. If you must use a different browser or device, ensure that cross-site tracking is not blocked.
 
 ## 📚 API
 
