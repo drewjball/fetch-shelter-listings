@@ -8,8 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { LoginCredentials } from "../types"
 import { useNavigate } from "react-router-dom"
 
-const TOKEN_DURATION = 60 * 60 * 1000
-const SESSION_TIMEOUT = TOKEN_DURATION
+const SESSION_TIMEOUT = 60 * 60 * 1000
 const WARNING_TIME = 5 * 60 * 1000
 
 export const useAuth = () => {

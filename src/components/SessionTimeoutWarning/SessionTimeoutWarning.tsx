@@ -12,7 +12,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react"
@@ -144,25 +143,10 @@ export const SessionTimeoutWarning: React.FC = () => {
                 </AlertDescription>
               </Box>
             </Alert>
-            <Box mb={4}>
+            <Box>
               Please choose to extend your session or log out. If no action is
               taken, you will be automatically logged out when the session
               expires.
-            </Box>
-            <Box fontSize="sm" mb={3}>
-              <Text fontWeight="bold" color="blue.600" mb={1}>
-                How Session Extension Works:
-              </Text>
-              <Text color="gray.600">
-                1. Your token from the server is valid for 1 hour
-              </Text>
-              <Text color="gray.600">
-                2. When you click "Extend", we'll get a fresh 1-hour token from
-                the server
-              </Text>
-              <Text color="gray.600">
-                3. For testing, the client-side timer is set to just 1 minute
-              </Text>
             </Box>
           </ModalBody>
 
